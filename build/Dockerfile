@@ -28,11 +28,17 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     apt-get install -y google-chrome-stable
 
 
-# Install STC
 ADD ./Sencha*.zip /
-RUN unzip Sencha*.zip -d /st
+
+# Install STC
+RUN unzip SenchaTest*.zip -d /st
 RUN printf '\n1\n\n/st\n2\n' | /st/SenchaTest*.sh
 ENV PATH ${PATH}:/st/stc
+
+# Install Sencha CMD
+RUN unzip SenchaCmd*.zip -d /sc
+RUN printf '\n\n\n\n\n\n\n\n\n\n\n1\n\n\n\n' | /sc/SenchaCmd*.sh
+ENV PATH ${PATH}:/root/bin/Sencha/Cmd
 
 # Frameworking to run sencha test in embedded browser
 RUN mkdir /root/.sencha
@@ -42,5 +48,8 @@ RUN apt-get install -y libx11-6 libnss3 libgconf-2-4 libfontconfig1
 RUN npm install -g selenium-standalone && \
     selenium-standalone install
 
+ADD ./entrypoint.sh /
+RUN chmod a+x /entrypoint.sh
+
 CMD ["run", "-s",  "test/example", "-p",  "Headless"]
-ENTRYPOINT ["selenium-standalone start && stc"]
+ENTRYPOINT ["/entrypoint.sh"]

@@ -5,3 +5,4 @@ services:
     volumes:
      - "$PWD/src:/ws"
     working_dir: "/ws"
+    privileged: true
