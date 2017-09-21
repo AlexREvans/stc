@@ -1,0 +1,7 @@
+version: '3'
+services:
+  web:
+    build: build
+    volumes:
+     - "$PWD/src:/ws"
+    working_dir: "/ws"
